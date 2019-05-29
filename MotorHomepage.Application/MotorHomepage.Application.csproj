@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MotorHomepage.Data.EF\MotorHomepage.Data.EF.csproj" />
+    <ProjectReference Include="..\MotorHomepage.Data\MotorHomepage.Data.csproj" />
+  </ItemGroup>
+
 </Project>

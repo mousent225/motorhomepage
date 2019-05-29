@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+
+using System;
+using System.IO;
+using System.Linq;
+
 using MotorHomepage.Data.EF.Configurations;
 using MotorHomepage.Data.EF.Extensions;
 using MotorHomepage.Data.Entities;
 using MotorHomepage.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MotorHomepage.Data.EF
 {
@@ -20,6 +23,8 @@ namespace MotorHomepage.Data.EF
 
         }
         #region DbSet
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<BannerKo> BannerKos { get; set; }
@@ -35,11 +40,11 @@ namespace MotorHomepage.Data.EF
         protected override void OnModelCreating(ModelBuilder builder)
         {
             #region IdentityConfig
-            builder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(c => c.Id);
-            builder.Entity<IdentityRoleClaim<string>>().ToTable("AppRoleClaims").HasKey(c => c.Id);
-            builder.Entity<IdentityUserLogin<string>>().ToTable("AppUserClaims").HasKey(c => c.UserId);
-            builder.Entity<IdentityUserRole<string>>().ToTable("AppUserRoles").HasKey(c => c.UserId);
-            builder.Entity<IdentityUserToken<string>>().ToTable("AppUserTokens").HasKey(c => c.UserId);
+            builder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims").HasKey(c => c.Id);
+            builder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims").HasKey(c => c.Id);
+            builder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(c => c.UserId);
+            builder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(c => c.UserId);
+            builder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(c => c.UserId);
             #endregion
 
             builder.AddConfiguration(new AttachmentConfiguration());
@@ -54,7 +59,7 @@ namespace MotorHomepage.Data.EF
             builder.AddConfiguration(new SysDictionaryConfiguration());
             builder.AddConfiguration(new SysMenuConfiguration());
 
-            base.OnModelCreating(builder);
+            //base.OnModelCreating(builder);
         }
 
         public override int SaveChanges()
@@ -71,6 +76,19 @@ namespace MotorHomepage.Data.EF
                 }
             }
             return base.SaveChanges();
+        }
+    }
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    {
+        public AppDbContext CreateDbContext(string[] args)
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("D:\\Project Hyosung\\MotorHomepage\\MotorHomepage\\appsettings.json").Build();
+            var builder = new DbContextOptionsBuilder<AppDbContext>();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            builder.UseSqlServer(connectionString);
+            return new AppDbContext(builder.Options);
         }
     }
 }

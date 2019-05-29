@@ -18,7 +18,9 @@ namespace MotorHomepage.Data.Entities
         [MaxLength(1000)]
         public string Description { get; set; }        
         public string Content { get; set; }
+        [MaxLength(255)]
         public string Thumbnail { get; set; }
+        [MaxLength(255)]
         public string Image { get; set; }
         [MaxLength(250)]
         public string ImageCaption { get; set; }

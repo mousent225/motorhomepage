@@ -82,6 +82,7 @@ namespace MotorHomepage.Data.EF
                     new SysMenu() {Id = "READER",Name = "Báo cáo độc giả",ParentId = "REPORT",SortOrder = 3,Status = Status.Active,URL = "/admin/report/reader",IconCss = "fa-bar-chart-o"  },
                 });
             }
+            await _context.SaveChangesAsync();
         }
     }
 }

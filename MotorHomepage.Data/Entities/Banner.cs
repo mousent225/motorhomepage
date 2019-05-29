@@ -12,6 +12,25 @@ namespace MotorHomepage.Data.Entities
     [Table("Banners")]
     public class Banner : DomainEntity<int>, ISwitchable, IDateTracking, IHasSoftDelete
     {
+        public Banner(string heading, string subHeading, string description, string image, Guid userCreated, DateTime dateCreated, 
+            Guid? userModified, DateTime? dateModified, Status status, PublishStatus publishStatus, bool isDeleted, 
+            DateTime? dateDeleted, Guid? userDeleted)
+        {
+            Heading = heading;
+            SubHeading = subHeading;
+            Description = description;
+            Image = image;
+            UserCreated = userCreated;
+            DateCreated = dateCreated;
+            UserModified = userModified;
+            DateModified = dateModified;
+            Status = status;
+            PublishStatus = publishStatus;
+            IsDeleted = isDeleted;
+            DateDeleted = dateDeleted;
+            UserDeleted = userDeleted;
+        }
+
         [MaxLength(255)]
         public string Heading { get; set; }
         [MaxLength(255)]
